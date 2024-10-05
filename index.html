@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Search App</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/simplelightbox/dist/simple-lightbox.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <form id="search-form">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search images..."
+          required
+        />
+        <button type="submit" class="btn">Search</button>
+      </form>
+
+      <!-- Loader -->
+      <div id="loader" class="hidden">
+        <p>Loading images, please wait...</p>
+      </div>
+
+      <!-- Gallery -->
+      <div id="gallery" class="gallery"></div>
+
+      <!-- Load more button -->
+      <button id="load-more" class="hidden">Load more</button>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
