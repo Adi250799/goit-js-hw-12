@@ -4,27 +4,29 @@ import 'izitoast/dist/css/iziToast.min.css';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
+// Klucz API Pixabay
 const API_KEY = '46331793-9cec4180ce0cddf1fbb8fc669';
 const BASE_URL = 'https://pixabay.com/api/';
 
+// DOM elements
 const form = document.querySelector('#search-form');
 const gallery = document.querySelector('#gallery');
 const loader = document.querySelector('#loader');
-const loadMoreBtn = document.querySelector('#load-more');
+const loadMoreBtn = document.querySelector('#load-more'); // Przycisk Load more
+
 let lightbox;
-let query = '';
-let page = 1;
-const perPage = 40;
+let currentPage = 1;
+let searchQuery = '';
 let totalHits = 0;
 
 form.addEventListener('submit', onSearch);
-loadMoreBtn.addEventListener('click', onLoadMore);
+loadMoreBtn.addEventListener('click', fetchImages);
 
 async function onSearch(event) {
   event.preventDefault();
-  query = event.target.querySelector('#search-input').value.trim();
+  searchQuery = event.target.querySelector('#search-input').value.trim();
 
-  if (query === '') {
+  if (searchQuery === '') {
     iziToast.error({
       title: 'Error',
       message: 'Please enter a search term!',
@@ -33,25 +35,22 @@ async function onSearch(event) {
   }
 
   clearGallery();
-  toggleLoader(true);
-  loadMoreBtn.classList.add('hidden');
-  page = 1;  // Reset paginacji
+  currentPage = 1;
+  toggleLoader();
+  loadMoreBtn.classList.add('hidden'); // Ukryj przycisk na początku wyszukiwania
 
   try {
-    const { data } = await fetchImages();
-    totalHits = data.totalHits;
+    const data = await fetchImages();
     if (data.hits.length === 0) {
       iziToast.warning({
         title: 'No results',
-        message: 'No images found. Try a different search query!',
+        message: 'Sorry, there are no images matching your search query. Please try again!',
       });
     } else {
       renderGallery(data.hits);
       lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 });
-      lightbox.refresh();
-      if (data.totalHits > perPage) {
-        loadMoreBtn.classList.remove('hidden');
-      }
+      totalHits = data.totalHits;
+      checkEndOfResults();
     }
   } catch (error) {
     iziToast.error({
@@ -59,91 +58,72 @@ async function onSearch(event) {
       message: 'Failed to fetch images. Please try again later.',
     });
   } finally {
-    toggleLoader(false);
+    toggleLoader();
   }
 }
 
-async function onLoadMore() {
-  page += 1;
-  toggleLoader(true);
+// Funkcja pobierająca obrazy z API
+async function fetchImages() {
   try {
-    const { data } = await fetchImages();
-    renderGallery(data.hits, true);
-    lightbox.refresh();
-
-    const { height: cardHeight } = document
-      .querySelector('.gallery')
-      .firstElementChild.getBoundingClientRect();
-
-    window.scrollBy({
-      top: cardHeight * 2,
-      behavior: 'smooth',
-    });
-
-    if (page * perPage >= totalHits) {
-      loadMoreBtn.classList.add('hidden');
-      iziToast.info({
-        title: 'End',
-        message: "We're sorry, but you've reached the end of search results.",
-      });
-    }
+    const { data } = await axios.get(`${BASE_URL}?key=${API_KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${currentPage}&per_page=40`);
+    renderGallery(data.hits);
+    lightbox.refresh(); // Odświeżenie instancji SimpleLightbox
+    currentPage += 1; // Zwiększ numer strony
+    checkEndOfResults();
+    smoothScroll();
+    return data;
   } catch (error) {
     iziToast.error({
       title: 'Error',
-      message: 'Failed to load more images. Please try again later.',
+      message: 'Failed to fetch images. Please try again later.',
     });
-  } finally {
-    toggleLoader(false);
   }
 }
 
-async function fetchImages() {
-  const response = await axios.get(`${BASE_URL}`, {
-    params: {
-      key: API_KEY,
-      q: query,
-      image_type: 'photo',
-      orientation: 'horizontal',
-      safesearch: true,
-      page,
-      per_page: perPage,
-    },
-  });
-  return response;
-}
-
-function renderGallery(images, append = false) {
-  const markup = images
-    .map(
-      image => `
-      <a href="${image.largeImageURL}" class="gallery__item">
-        <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />
-        <div class="info">
-          <p><b>Likes:</b> ${image.likes}</p>
-          <p><b>Views:</b> ${image.views}</p>
-          <p><b>Comments:</b> ${image.comments}</p>
-          <p><b>Downloads:</b> ${image.downloads}</p>
-        </div>
-      </a>
-    `
-    )
-    .join('');
-
-  if (append) {
-    gallery.insertAdjacentHTML('beforeend', markup);
+// Funkcja sprawdzająca, czy dotarliśmy do końca wyników
+function checkEndOfResults() {
+  if (gallery.querySelectorAll('.gallery__item').length >= totalHits) {
+    loadMoreBtn.classList.add('hidden'); // Ukryj przycisk, gdy osiągnięto koniec wyników
+    iziToast.info({
+      title: 'End of results',
+      message: "We're sorry, but you've reached the end of search results.",
+    });
   } else {
-    gallery.innerHTML = markup;
+    loadMoreBtn.classList.remove('hidden'); // Pokaż przycisk, jeśli są więcej wyniki
   }
 }
 
+// Renderowanie galerii
+function renderGallery(images) {
+  const markup = images.map(image => `
+    <a href="${image.largeImageURL}" class="gallery__item">
+      <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />
+      <div class="info">
+        <p><b>Likes:</b> ${image.likes}</p>
+        <p><b>Views:</b> ${image.views}</p>
+        <p><b>Comments:</b> ${image.comments}</p>
+        <p><b>Downloads:</b> ${image.downloads}</p>
+      </div>
+    </a>
+  `).join('');
+  gallery.insertAdjacentHTML('beforeend', markup); // Dodaj obrazy do galerii
+}
+
+// Czyszczenie galerii
 function clearGallery() {
   gallery.innerHTML = '';
 }
 
-function toggleLoader(isLoading) {
-  if (isLoading) {
-    loader.classList.remove('hidden');
-  } else {
-    loader.classList.add('hidden');
-  }
+// Funkcja zmieniająca widoczność wskaźnika ładowania
+function toggleLoader() {
+  loader.classList.toggle('hidden');
+}
+
+// Płynne przewijanie
+function smoothScroll() {
+  const { height: cardHeight } = gallery.firstElementChild.getBoundingClientRect();
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }

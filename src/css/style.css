@@ -1,0 +1,158 @@
+#search-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    opacity: 0px;
+    gap: 8px;
+  }
+  .btn {
+    width: 75px;
+    height: 40px;
+    top: 268px;
+    left: 28px;
+    padding: 8px 16px 8px 16px;
+    gap: 10px;
+    border-radius: 8px 8px 8px 8px;
+    opacity: 0px;
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(78, 117, 255, 1);
+    border-color: rgba(78, 117, 255, 1);
+  }
+  :hover.btn {
+    background-color: rgba(108, 140, 255, 1);
+  }
+  #search-input {
+    width: 272px;
+    height: 40px;
+    gap: 8px;
+    opacity: 0px;
+    border-radius: 4px;
+  }
+  ::placeholder {
+    font-family: Montserrat;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.04em;
+    text-align: left;
+    color: rgba(128, 128, 128, 1);
+  }
+  .image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin-left: 156px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    gap: 24px;
+    width: 1128px;
+    height: 200px;
+  }
+  .gallery-item {
+    flex-basis: calc(33.333% - 24px);
+    width: 320px;
+    height: 200px;
+    gap: 24px;
+  }
+  
+  .container {
+    width: 1128px;
+    height: 200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+  }
+  
+  .card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .card img {
+    width: 100%;
+    display: block;
+  }
+  
+  .info {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .info p {
+    margin: 5px 0;
+  }
+  
+  .hidden {
+    justify-content: center;
+    text-align: center;
+    gap: 24px;
+  }
+  
+  p {
+    font-family: Montserrat;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.04em;
+    color: rgba(46, 47, 66, 1);
+    width: 256px;
+    height: 24px;
+    top: 108px;
+    gap: 0px;
+    opacity: 0px;
+    text-align: center;
+    justify-content: center;
+  }
+  .gallery-image {
+    width: 320px;
+    height: 200px;
+    gap: 24px;
+  }
+  img {
+    width: 320px;
+    height: 200px;
+    gap: 24px;
+  }
+  .css-loader {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .loader {
+    font-family: Montserrat;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.04em;
+    text-align: left;
+    width: 256px;
+    height: 24px;
+    gap: 0px;
+    opacity: 0px;
+    align-items: center;
+    justify-content: center;
+  }
+  .stats {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+  }
+  .span {
+    display: flex;
+    flex-direction: row;
+  }
+  #loader {
+    display: none;
+    text-align: center;
+  }
