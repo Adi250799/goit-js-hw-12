@@ -1,51 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>goit-js-hw-11</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/simplelightbox/dist/simple-lightbox.min.css"
-    />
-    <link rel="icon" href="./favicon.ico" />
-    <script type="module" crossorigin src="/vanilla-app-template/index.js"></script>
-    <link rel="modulepreload" crossorigin href="/vanilla-app-template/assets/vendor-Qob_5Ba8.js">
-    <link rel="stylesheet" crossorigin href="/vanilla-app-template/assets/vendor-DumFYO8Z.css">
-    <link rel="stylesheet" crossorigin href="/vanilla-app-template/assets/index-DhuIqRS3.css">
-  </head>
-  <body>
-    <div class="container">
-      <form id="search-form">
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Search images..."
-          required
-        />
-        <button type="submit" class="btn">Start</button>
-      </form>
 
-      <!-- Wskaźnik ładowania -->
-      <div id="loader" class="css-loader" hidden>
-        <div class="loader"><p>Loading images, please wait...</p></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page 2</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.1.3/simple-lightbox.min.css" />
+
+  <script type="module" crossorigin src="/vanilla-app-template/index.js"></script>
+  <link rel="modulepreload" crossorigin href="/vanilla-app-template/assets/vendor-BIHATn4Y.js">
+  <link rel="stylesheet" crossorigin href="/vanilla-app-template/assets/vendor-CWKLx11g.css">
+  <link rel="stylesheet" crossorigin href="/vanilla-app-template/assets/index-DhuIqRS3.css">
+</head>
+
+<body>
+  <header>
+    <header class="header">
+  <div class="container">
+    <nav class="nav">
+      <a class="nav-logo" href="./index.html" aria-label="Site logo">
+        <svg class="nav-logo-icon" width="100" height="30">
+          <use href="/vanilla-app-template/assets/sprite-E8vg0sBb.svg#logo"></use>
+        </svg>
+      </a>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a class="nav-link active" href="./page-2.html">Page 2</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {=$highlight-curr}" href="./page-3.html">Page 3</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+  </header>
+
+  <main>
+
+    <form class="search-form" id="search-form">
+      <input class="gallery-input" type="text" id="query" placeholder="Search images..." />
+      <button class="search-button" type="submit">Search</button>
+    </form>
+
+    <div id="loader" class="loader" style="display: none;"></div>
+
+    <div id="gallery" class="gallery hidden">
+
+      <div class="load-more-container">
+      <button class="load-more" style="display: none;">Load more</button>
       </div>
+      <a href="${image.largeImageURL}" class="gallery-item">
 
-      <!-- Galeria obrazów -->
-      <div id="gallery" class="gallery" width="1128" height="200"></div>
-      <button id="load-more" style="display: none">Load more</button>
+        <img src="${image.webformatURL}" alt="${image.tags}" />
+        <div class="image-info">
+          <p><span class="image-info-label">Likes:</span> <span class="image-info-value">${image.likes}</span></p>
+          <p><span class="image-info-label">Views:</span> <span class="image-info-value">${image.views}</span></p>
+          <p><span class="image-info-label">Comments:</span> <span class="image-info-value">${image.comments}</span></p>
+          <p><span class="image-info-label">Downloads:</span> <span class="image-info-value">${image.downloads}</span>
+          </p>
+        </div>
+      </a>
     </div>
 
-    <!-- Dodaj bibliotekę iziToast -->
-    <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
 
-    <!-- Dodaj bibliotekę SimpleLightbox -->
-    <script src="https://cdn.jsdelivr.net/npm/simplelightbox/dist/simple-lightbox.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.1.3/simple-lightbox.min.js"></script>
 
-  </body>
+
+  <!-- <footer class="footer">
+  <div class="container">
+    <p class="footer-desc">
+      Made with ✨ by
+      <a
+        class="footer-link"
+        href="https://goit.global/ua/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        GoIT team
+      </a>
+    </p>
+  </div>
+</footer>
+ -->
+</body>
+
 </html>
