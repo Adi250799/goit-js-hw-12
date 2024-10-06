@@ -1,8 +1,6 @@
 import axios from 'axios';
 import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
 import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
 
 // Klucz API Pixabay
 const API_KEY = '46331793-9cec4180ce0cddf1fbb8fc669';
@@ -12,7 +10,7 @@ const BASE_URL = 'https://pixabay.com/api/';
 const form = document.querySelector('#search-form');
 const gallery = document.querySelector('#gallery');
 const loader = document.querySelector('#loader');
-const loadMoreBtn = document.querySelector('#load-more'); // Przycisk Load more
+const loadMoreBtn = document.querySelector('#load-more');
 
 let lightbox;
 let currentPage = 1;
@@ -36,8 +34,8 @@ async function onSearch(event) {
 
   clearGallery();
   currentPage = 1;
-  toggleLoader();
-  loadMoreBtn.classList.add('hidden'); // Ukryj przycisk na początku wyszukiwania
+  toggleLoader(true);
+  loadMoreBtn.classList.add('hidden');
 
   try {
     const data = await fetchImages();
@@ -58,19 +56,20 @@ async function onSearch(event) {
       message: 'Failed to fetch images. Please try again later.',
     });
   } finally {
-    toggleLoader();
+    toggleLoader(false);
   }
 }
 
-// Funkcja pobierająca obrazy z API
 async function fetchImages() {
   try {
     const { data } = await axios.get(`${BASE_URL}?key=${API_KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${currentPage}&per_page=40`);
-    renderGallery(data.hits);
-    lightbox.refresh(); // Odświeżenie instancji SimpleLightbox
-    currentPage += 1; // Zwiększ numer strony
-    checkEndOfResults();
-    smoothScroll();
+    if (data.hits.length > 0) {
+      renderGallery(data.hits);
+      lightbox.refresh();
+      currentPage += 1;
+      checkEndOfResults();
+      smoothScroll();
+    }
     return data;
   } catch (error) {
     iziToast.error({
@@ -80,20 +79,18 @@ async function fetchImages() {
   }
 }
 
-// Funkcja sprawdzająca, czy dotarliśmy do końca wyników
 function checkEndOfResults() {
   if (gallery.querySelectorAll('.gallery__item').length >= totalHits) {
-    loadMoreBtn.classList.add('hidden'); // Ukryj przycisk, gdy osiągnięto koniec wyników
+    loadMoreBtn.classList.add('hidden');
     iziToast.info({
       title: 'End of results',
       message: "We're sorry, but you've reached the end of search results.",
     });
   } else {
-    loadMoreBtn.classList.remove('hidden'); // Pokaż przycisk, jeśli są więcej wyniki
+    loadMoreBtn.classList.remove('hidden');
   }
 }
 
-// Renderowanie galerii
 function renderGallery(images) {
   const markup = images.map(image => `
     <a href="${image.largeImageURL}" class="gallery__item">
@@ -106,20 +103,17 @@ function renderGallery(images) {
       </div>
     </a>
   `).join('');
-  gallery.insertAdjacentHTML('beforeend', markup); // Dodaj obrazy do galerii
+  gallery.insertAdjacentHTML('beforeend', markup);
 }
 
-// Czyszczenie galerii
 function clearGallery() {
   gallery.innerHTML = '';
 }
 
-// Funkcja zmieniająca widoczność wskaźnika ładowania
-function toggleLoader() {
-  loader.classList.toggle('hidden');
+function toggleLoader(show) {
+  loader.style.display = show ? 'block' : 'none';
 }
 
-// Płynne przewijanie
 function smoothScroll() {
   const { height: cardHeight } = gallery.firstElementChild.getBoundingClientRect();
   window.scrollBy({
